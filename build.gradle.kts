@@ -3,7 +3,7 @@ plugins {
     signing
     id("net.kyori.indra")
     id("net.kyori.indra.publishing")
-    id("net.ltgt.errorprone") version "4.0.1"
+    id("net.ltgt.errorprone") version "4.3.0"
 }
 
 group = "dev.lu15"
@@ -45,17 +45,17 @@ repositories {
 
 dependencies {
     // minestom
-    val minestom = "net.minestom:minestom-snapshots:7b659f0fc3"
+    val minestom = "net.minestom:minestom:2025.08.29-1.21.8"
     compileOnly(minestom)
     testImplementation(minestom)
 
     // error-prone
-    errorprone("com.google.errorprone:error_prone_core:2.31.0")
+    errorprone("com.google.errorprone:error_prone_core:2.41.0")
 
     // testing
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    testImplementation(platform("org.junit:junit-bom:5.13.4"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("ch.qos.logback:logback-classic:1.5.7")
+    testImplementation("ch.qos.logback:logback-classic:1.5.18")
 }
 
 tasks.test {

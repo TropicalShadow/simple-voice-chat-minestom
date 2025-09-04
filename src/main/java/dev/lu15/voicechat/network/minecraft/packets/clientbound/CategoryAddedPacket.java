@@ -1,15 +1,17 @@
 package dev.lu15.voicechat.network.minecraft.packets.clientbound;
 
+import dev.lu15.voicechat.VoiceChat;
 import dev.lu15.voicechat.network.minecraft.Category;
 import dev.lu15.voicechat.network.minecraft.Packet;
 import java.util.regex.Pattern;
+import net.kyori.adventure.key.Key;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 public record CategoryAddedPacket(@NotNull String identifier, @NotNull Category category) implements Packet<CategoryAddedPacket> {
 
+    public static final @NotNull Key IDENTIFIER = VoiceChat.key("add_category");
     public static final @NotNull NetworkBuffer.Type<CategoryAddedPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.STRING, CategoryAddedPacket::identifier,
             Category.NETWORK_TYPE, CategoryAddedPacket::category,
@@ -17,7 +19,7 @@ public record CategoryAddedPacket(@NotNull String identifier, @NotNull Category 
     );
     public static final @NotNull Pattern IDENTIFIER_PATTERN = Pattern.compile("^[a-z_]{1,16}$");
 
-    public CategoryAddedPacket(@NotNull NamespaceID identifier, @NotNull Category category) {
+    public CategoryAddedPacket(@NotNull Key identifier, @NotNull Category category) {
         this(identifier.toString().replace(':', '_'), category);
     }
 
@@ -34,8 +36,8 @@ public record CategoryAddedPacket(@NotNull String identifier, @NotNull Category 
     }
 
     @Override
-    public @NotNull String id() {
-        return "voicechat:add_category";
+    public @NotNull Key id() {
+        return IDENTIFIER;
     }
 
     @Override

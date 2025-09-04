@@ -1,9 +1,11 @@
 package dev.lu15.voicechat.network.minecraft.packets.clientbound;
 
 import dev.lu15.voicechat.Codec;
+import dev.lu15.voicechat.VoiceChat;
 import dev.lu15.voicechat.network.NetworkTypes;
 import dev.lu15.voicechat.network.minecraft.Packet;
 import java.util.UUID;
+import net.kyori.adventure.key.Key;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +23,7 @@ public record HandshakeAcknowledgePacket(
         boolean recording
 ) implements Packet<HandshakeAcknowledgePacket> {
 
+    public static final @NotNull Key IDENTIFIER = VoiceChat.key("secret");
     public static final @NotNull NetworkBuffer.Type<HandshakeAcknowledgePacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.UUID, HandshakeAcknowledgePacket::secret,
             NetworkBuffer.INT, HandshakeAcknowledgePacket::port,
@@ -36,8 +39,8 @@ public record HandshakeAcknowledgePacket(
     );
 
     @Override
-    public @NotNull String id() {
-        return "voicechat:secret";
+    public @NotNull Key id() {
+        return IDENTIFIER;
     }
 
     @Override

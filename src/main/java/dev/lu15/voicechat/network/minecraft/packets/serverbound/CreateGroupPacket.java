@@ -1,8 +1,10 @@
 package dev.lu15.voicechat.network.minecraft.packets.serverbound;
 
+import dev.lu15.voicechat.VoiceChat;
 import dev.lu15.voicechat.network.NetworkTypes;
 import dev.lu15.voicechat.network.minecraft.Group;
 import dev.lu15.voicechat.network.minecraft.Packet;
+import net.kyori.adventure.key.Key;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +16,7 @@ public record CreateGroupPacket(
         @NotNull Group.Type type
 ) implements Packet<CreateGroupPacket> {
 
+    public static final @NotNull Key IDENTIFIER = VoiceChat.key("create_group");
     public static final @NotNull NetworkBuffer.Type<CreateGroupPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.STRING, CreateGroupPacket::name,
             NetworkBuffer.STRING.optional(), CreateGroupPacket::password,
@@ -22,8 +25,8 @@ public record CreateGroupPacket(
     );
 
     @Override
-    public @NotNull String id() {
-        return "voicechat:create_group";
+    public @NotNull Key id() {
+        return IDENTIFIER;
     }
 
     @Override

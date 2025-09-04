@@ -1,7 +1,9 @@
 package dev.lu15.voicechat.network.minecraft.packets.clientbound;
 
+import dev.lu15.voicechat.VoiceChat;
 import dev.lu15.voicechat.network.minecraft.Packet;
 import java.util.UUID;
+import net.kyori.adventure.key.Key;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +14,8 @@ public record GroupChangedPacket(
         boolean incorrectPassword
 ) implements Packet<GroupChangedPacket> {
 
+    public static final @NotNull Key IDENTIFIER = VoiceChat.key("joined_group");
+    @SuppressWarnings("DataFlowIssue")
     public static final @NotNull NetworkBuffer.Type<GroupChangedPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.OPT_UUID, GroupChangedPacket::group,
             NetworkBuffer.BOOLEAN, GroupChangedPacket::incorrectPassword,
@@ -19,8 +23,8 @@ public record GroupChangedPacket(
     );
 
     @Override
-    public @NotNull String id() {
-        return "voicechat:joined_group";
+    public @NotNull Key id() {
+        return IDENTIFIER;
     }
 
     @Override

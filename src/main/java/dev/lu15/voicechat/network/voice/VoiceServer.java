@@ -6,7 +6,7 @@ import dev.lu15.voicechat.VoiceChat;
 import dev.lu15.voicechat.network.minecraft.VoiceState;
 import dev.lu15.voicechat.event.PlayerJoinVoiceChatEvent;
 import dev.lu15.voicechat.event.PlayerMicrophoneEvent;
-import dev.lu15.voicechat.network.minecraft.packets.clientbound.VoiceStatesPacket;
+import dev.lu15.voicechat.network.minecraft.packets.clientbound.VoiceStatesUpdatedPacket;
 import dev.lu15.voicechat.network.voice.encryption.SecretUtilities;
 import dev.lu15.voicechat.network.voice.packets.AuthenticatePacket;
 import dev.lu15.voicechat.network.voice.packets.AuthenticationAcknowledgedPacket;
@@ -222,7 +222,7 @@ public final class VoiceServer {
                 .filter(p -> p.hasTag(Tags.PLAYER_STATE))
                 .map(p -> p.getTag(Tags.PLAYER_STATE))
                 .collect(Collectors.toSet());
-        this.voiceChat.sendPacket(player, new VoiceStatesPacket(states));
+        this.voiceChat.sendPacket(player, new VoiceStatesUpdatedPacket(states));
 
         // this is the packet that is sent when the client is ready to receive voice packets
         // this means they are successfully connected to the voice server
