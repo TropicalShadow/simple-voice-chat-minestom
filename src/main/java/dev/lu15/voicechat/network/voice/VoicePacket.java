@@ -7,7 +7,7 @@ public interface VoicePacket<T extends VoicePacket<T>> {
 
     int id();
 
-    @NotNull NetworkBuffer.Type<T> serializer();
+    @NotNull NetworkBuffer.Type<@NotNull T> serializer();
 
     default long ttl() {
         return 10_000;

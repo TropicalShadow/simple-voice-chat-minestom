@@ -16,7 +16,7 @@ public record GroupChangedPacket(
 
     public static final @NotNull Key IDENTIFIER = VoiceChat.key("joined_group");
     @SuppressWarnings("DataFlowIssue")
-    public static final @NotNull NetworkBuffer.Type<GroupChangedPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final @NotNull NetworkBuffer.Type<@NotNull GroupChangedPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.OPT_UUID, GroupChangedPacket::group,
             NetworkBuffer.BOOLEAN, GroupChangedPacket::incorrectPassword,
             GroupChangedPacket::new
@@ -28,7 +28,7 @@ public record GroupChangedPacket(
     }
 
     @Override
-    public NetworkBuffer.@NotNull Type<GroupChangedPacket> serializer() {
+    public NetworkBuffer.@NotNull Type<@NotNull GroupChangedPacket> serializer() {
         return SERIALIZER;
     }
 

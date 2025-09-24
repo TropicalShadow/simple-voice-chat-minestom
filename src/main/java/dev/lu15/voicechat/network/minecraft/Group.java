@@ -15,7 +15,7 @@ public record Group(
         @NotNull Type type
 ) {
 
-    public static final @NotNull NetworkBuffer.Type<Group> NETWORK_TYPE = NetworkBufferTemplate.template(
+    public static final @NotNull NetworkBuffer.Type<@NotNull Group> NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.UUID, Group::id,
             NetworkBuffer.STRING, Group::name,
             NetworkBuffer.BOOLEAN, Group::passwordProtected,

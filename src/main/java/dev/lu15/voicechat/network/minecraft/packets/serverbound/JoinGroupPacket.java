@@ -15,7 +15,7 @@ public record JoinGroupPacket(
 ) implements Packet<JoinGroupPacket> {
 
     public static final @NotNull Key IDENTIFIER = VoiceChat.key("set_group");
-    public static final @NotNull NetworkBuffer.Type<JoinGroupPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final @NotNull NetworkBuffer.Type<@NotNull JoinGroupPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.UUID, JoinGroupPacket::group,
             NetworkBuffer.STRING.optional(), JoinGroupPacket::password,
             JoinGroupPacket::new
@@ -27,7 +27,7 @@ public record JoinGroupPacket(
     }
 
     @Override
-    public NetworkBuffer.@NotNull Type<JoinGroupPacket> serializer() {
+    public NetworkBuffer.@NotNull Type<@NotNull JoinGroupPacket> serializer() {
         return SERIALIZER;
     }
 

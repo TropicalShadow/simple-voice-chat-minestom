@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public record GroupCreatedPacket(@NotNull Group group) implements Packet<GroupCreatedPacket> {
 
     public static final @NotNull Key IDENTIFIER = VoiceChat.key("add_group");
-    public static final @NotNull NetworkBuffer.Type<GroupCreatedPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final @NotNull NetworkBuffer.Type<@NotNull GroupCreatedPacket> SERIALIZER = NetworkBufferTemplate.template(
             Group.NETWORK_TYPE, GroupCreatedPacket::group,
             GroupCreatedPacket::new
     );
@@ -22,7 +22,7 @@ public record GroupCreatedPacket(@NotNull Group group) implements Packet<GroupCr
     }
 
     @Override
-    public NetworkBuffer.@NotNull Type<GroupCreatedPacket> serializer() {
+    public NetworkBuffer.@NotNull Type<@NotNull GroupCreatedPacket> serializer() {
         return SERIALIZER;
     }
 

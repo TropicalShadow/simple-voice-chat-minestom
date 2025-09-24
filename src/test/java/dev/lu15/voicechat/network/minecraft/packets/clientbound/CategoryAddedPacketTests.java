@@ -19,7 +19,8 @@ public final class CategoryAddedPacketTests {
         String name = generateString(16);
         String description = generateString(64);
         int[][] icon = new int[16][16];
-        CategoryAddedPacket packet = new CategoryAddedPacket(id, new Category(name, description, icon));
+        // TODO - handle localization keys
+        CategoryAddedPacket packet = new CategoryAddedPacket(id, new Category(name, null, description, null, icon));
 
         packet.serializer().write(buffer, packet);
 
@@ -36,7 +37,7 @@ public final class CategoryAddedPacketTests {
         String id = generateString(16);
         String name = generateString(16);
         int[][] icon = new int[16][16];
-        CategoryAddedPacket packet = new CategoryAddedPacket(id, new Category(name, null, icon));
+        CategoryAddedPacket packet = new CategoryAddedPacket(id, new Category(name, null, null, null, icon));
 
         packet.serializer().write(buffer, packet);
 
@@ -53,7 +54,7 @@ public final class CategoryAddedPacketTests {
         String id = generateString(16);
         String name = generateString(16);
         String description = generateString(64);
-        CategoryAddedPacket packet = new CategoryAddedPacket(id, new Category(name, description, null));
+        CategoryAddedPacket packet = new CategoryAddedPacket(id, new Category(name, null, description, null, null));
 
         packet.serializer().write(buffer, packet);
 
@@ -70,7 +71,7 @@ public final class CategoryAddedPacketTests {
         String description = generateString(64);
         int[][] icon = new int[16][16];
 
-        assertThrows(IllegalArgumentException.class, () -> new CategoryAddedPacket(id, new Category(name, description, icon)));
+        assertThrows(IllegalArgumentException.class, () -> new CategoryAddedPacket(id, new Category(name, null, description, null, icon)));
     }
 
     @Test
@@ -80,7 +81,7 @@ public final class CategoryAddedPacketTests {
         String description = generateString(64);
         int[][] icon = new int[16][16];
 
-        assertThrows(IllegalArgumentException.class, () -> new CategoryAddedPacket(id, new Category(name, description, icon)));
+        assertThrows(IllegalArgumentException.class, () -> new CategoryAddedPacket(id, new Category(name, null, description, null, icon)));
     }
 
     @Test
@@ -90,7 +91,7 @@ public final class CategoryAddedPacketTests {
         String description = generateString(64);
         int[][] icon = new int[16][16];
 
-        assertThrows(IllegalArgumentException.class, () -> new CategoryAddedPacket(id, new Category(name, description, icon)));
+        assertThrows(IllegalArgumentException.class, () -> new CategoryAddedPacket(id, new Category(name, null, description, null, icon)));
     }
 
     @Test
@@ -100,7 +101,7 @@ public final class CategoryAddedPacketTests {
         String description = generateString(32768);
         int[][] icon = new int[16][16];
 
-        assertThrows(IllegalArgumentException.class, () -> new CategoryAddedPacket(id, new Category(name, description, icon)));
+        assertThrows(IllegalArgumentException.class, () -> new CategoryAddedPacket(id, new Category(name, null, description, null, icon)));
     }
 
     @Test
@@ -110,7 +111,7 @@ public final class CategoryAddedPacketTests {
         String description = generateString(64);
         int[][] icon = new int[16][17];
 
-        assertThrows(IllegalArgumentException.class, () -> new CategoryAddedPacket(id, new Category(name, description, icon)));
+        assertThrows(IllegalArgumentException.class, () -> new CategoryAddedPacket(id, new Category(name, null, description, null, icon)));
     }
 
     @Test
@@ -120,7 +121,7 @@ public final class CategoryAddedPacketTests {
         String description = generateString(64);
         int[][] icon = new int[17][16];
 
-        assertThrows(IllegalArgumentException.class, () -> new CategoryAddedPacket(id, new Category(name, description, icon)));
+        assertThrows(IllegalArgumentException.class, () -> new CategoryAddedPacket(id, new Category(name, null, description, null, icon)));
     }
 
 }

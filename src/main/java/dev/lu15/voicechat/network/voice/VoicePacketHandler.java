@@ -1,6 +1,7 @@
 package dev.lu15.voicechat.network.voice;
 
 import dev.lu15.voicechat.network.voice.encryption.AES;
+import dev.lu15.voicechat.network.voice.encryption.Secret;
 import dev.lu15.voicechat.network.voice.encryption.SecretUtilities;
 import dev.lu15.voicechat.network.voice.packets.AuthenticatePacket;
 import dev.lu15.voicechat.network.voice.packets.AuthenticationAcknowledgedPacket;
@@ -25,7 +26,7 @@ public final class VoicePacketHandler {
 
     private static final byte MAGIC_BYTE = (byte) 0b11111111;
 
-    private final @NotNull ObjectArray<NetworkBuffer.Type<VoicePacket<?>>> suppliers = ObjectArray.singleThread(0xA);
+    private final @NotNull ObjectArray<NetworkBuffer.@NotNull Type<@NotNull VoicePacket<?>>> suppliers = ObjectArray.singleThread(0xA);
 
     public VoicePacketHandler() {
         this.register(0x1, MicrophonePacket.SERIALIZER);
@@ -41,8 +42,8 @@ public final class VoicePacketHandler {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends VoicePacket<T>> void register(int id, @NotNull NetworkBuffer.Type<T> supplier) {
-        this.suppliers.set(id, (NetworkBuffer.Type<VoicePacket<?>>) supplier);
+    public <T extends VoicePacket<T>> void register(int id, @NotNull NetworkBuffer.Type<@NotNull T> supplier) {
+        this.suppliers.set(id, (NetworkBuffer.Type<@NotNull VoicePacket<?>>) supplier);
     }
 
     public @Nullable VoicePacket<?> read(@NotNull RawPacket packet) throws Exception {
@@ -54,14 +55,15 @@ public final class VoicePacketHandler {
         Player player = MinecraftServer.getConnectionManager().getOnlinePlayerByUuid(outer.read(NetworkBuffer.UUID));
         if (player == null || !player.isOnline()) return null; // player has disconnected
 
-        UUID secret = SecretUtilities.getSecret(player.getUuid());
+        Secret secret = SecretUtilities.getSecret(player.getUuid());
         if (secret == null) throw new IllegalStateException("no secret for player");
 
-        byte[] decrypted = AES.decrypt(secret, outer.read(NetworkBuffer.BYTE_ARRAY));
+
+        byte[] decrypted = secret.decrypt(outer.read(NetworkBuffer.BYTE_ARRAY));
         NetworkBuffer buffer = NetworkBuffer.wrap(decrypted, 0, decrypted.length);
 
         int id = buffer.read(NetworkBuffer.BYTE);
-        NetworkBuffer.Type<VoicePacket<?>> supplier = this.suppliers.get(id);
+        NetworkBuffer.Type<@NotNull VoicePacket<?>> supplier = this.suppliers.get(id);
         if (supplier == null) throw new IllegalStateException("invalid packet id");
 
         return supplier.read(buffer);
@@ -81,7 +83,7 @@ public final class VoicePacketHandler {
         NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
         buffer.write(NetworkBuffer.BYTE, MAGIC_BYTE);
 
-        UUID secret = SecretUtilities.getSecret(player);
+        Secret secret = SecretUtilities.getSecret(player);
         if (secret == null) throw new IllegalStateException("no secret for player");
 
         NetworkBuffer inner = NetworkBuffer.resizableBuffer();
@@ -91,7 +93,7 @@ public final class VoicePacketHandler {
         byte[] data = new byte[(int) inner.writeIndex()];
         inner.copyTo(0, data, 0, data.length);
 
-        byte[] encrypted = AES.encrypt(secret, data);
+        byte[] encrypted = secret.encrypt(data);
         buffer.write(NetworkBuffer.BYTE_ARRAY, encrypted);
 
         byte[] result = new byte[(int) buffer.writeIndex()];

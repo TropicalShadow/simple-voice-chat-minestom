@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public record GroupRemovedPacket(@NotNull UUID group) implements Packet<GroupRemovedPacket> {
 
     public static final @NotNull Key IDENTIFIER = VoiceChat.key("remove_group");
-    public static final @NotNull NetworkBuffer.Type<GroupRemovedPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final @NotNull NetworkBuffer.Type<@NotNull GroupRemovedPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.UUID, GroupRemovedPacket::group,
             GroupRemovedPacket::new
     );
@@ -22,7 +22,7 @@ public record GroupRemovedPacket(@NotNull UUID group) implements Packet<GroupRem
     }
 
     @Override
-    public NetworkBuffer.@NotNull Type<GroupRemovedPacket> serializer() {
+    public NetworkBuffer.@NotNull Type<@NotNull GroupRemovedPacket> serializer() {
         return SERIALIZER;
     }
 

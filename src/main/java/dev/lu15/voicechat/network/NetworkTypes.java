@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class NetworkTypes {
 
-    public static <E extends Enum<E>> NetworkBuffer. @NotNull Type<E> ByteEnum(@NotNull Class<E> enumClass) {
+    public static <E extends Enum<E>> NetworkBuffer. @NotNull Type<@NotNull E> ByteEnum(@NotNull Class<E> enumClass) {
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(@NotNull NetworkBuffer buffer, E value) {
@@ -24,7 +24,7 @@ public final class NetworkTypes {
         };
     }
 
-    public static <E extends Enum<E>> NetworkBuffer. @NotNull Type<E> ShortEnum(@NotNull Class<E> enumClass) {
+    public static <E extends Enum<E>> NetworkBuffer. @NotNull Type<@NotNull E> ShortEnum(@NotNull Class<E> enumClass) {
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(@NotNull NetworkBuffer buffer, E value) {
@@ -38,7 +38,7 @@ public final class NetworkTypes {
         };
     }
 
-    public static <T> NetworkBuffer.@NotNull Type<Collection<T>> IntIndexedCollection(@NotNull NetworkBuffer.Type<T> backend) {
+    public static <T> NetworkBuffer.@NotNull Type<@NotNull Collection<T>> IntIndexedCollection(@NotNull NetworkBuffer.Type<@NotNull T> backend) {
         return new NetworkBuffer.Type<>() {
             @Override
             public void write(@NotNull NetworkBuffer buffer, Collection<T> value) {
@@ -56,7 +56,7 @@ public final class NetworkTypes {
         };
     }
 
-    public static final @NotNull NetworkBuffer.Type<Point> POSITION = new NetworkBuffer.Type<>() {
+    public static final @NotNull NetworkBuffer.Type<@NotNull Point> POSITION = new NetworkBuffer.Type<>() {
         @Override
         public Point read(@NotNull NetworkBuffer buffer) {
             return new Pos(

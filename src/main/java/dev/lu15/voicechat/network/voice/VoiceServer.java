@@ -7,6 +7,7 @@ import dev.lu15.voicechat.network.minecraft.VoiceState;
 import dev.lu15.voicechat.event.PlayerJoinVoiceChatEvent;
 import dev.lu15.voicechat.event.PlayerMicrophoneEvent;
 import dev.lu15.voicechat.network.minecraft.packets.clientbound.VoiceStatesUpdatedPacket;
+import dev.lu15.voicechat.network.voice.encryption.Secret;
 import dev.lu15.voicechat.network.voice.encryption.SecretUtilities;
 import dev.lu15.voicechat.network.voice.packets.AuthenticatePacket;
 import dev.lu15.voicechat.network.voice.packets.AuthenticationAcknowledgedPacket;
@@ -55,7 +56,7 @@ public final class VoiceServer {
     private boolean running;
     private long lastKeepAlive;
 
-    public VoiceServer(@NotNull VoiceChat voiceChat, @NotNull InetAddress address, int port, @NotNull EventNode<Event> eventNode) {
+    public VoiceServer(@NotNull VoiceChat voiceChat, @NotNull InetAddress address, int port, @NotNull EventNode<@NotNull Event> eventNode) {
         this.voiceChat = voiceChat;
         this.address = address;
         this.port = port;
@@ -201,7 +202,12 @@ public final class VoiceServer {
             return;
         }
 
-        if (!packet.secret().equals(SecretUtilities.getSecret(player))) {
+        Secret secret = SecretUtilities.getSecret(player);
+        if (secret == null) {
+            throw new IllegalStateException("player has no secret");
+        }
+
+        if (!secret.equals(Secret.fromBytes(packet.secret()))) {
             LOGGER.warn("received invalid secret from {}", player.getUsername());
             player.kick(Component.text("Simple Voice Chat | Received incorrect secret, please rejoin."));
             return;

@@ -11,7 +11,7 @@ public record PingPacket(
         long timestamp
 ) implements VoicePacket<PingPacket> {
 
-    public static final @NotNull NetworkBuffer.Type<PingPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final @NotNull NetworkBuffer.Type<@NotNull PingPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.UUID, PingPacket::player,
             NetworkBuffer.LONG, PingPacket::timestamp,
             PingPacket::new
@@ -23,7 +23,7 @@ public record PingPacket(
     }
 
     @Override
-    public NetworkBuffer.@NotNull Type<PingPacket> serializer() {
+    public NetworkBuffer.@NotNull Type<@NotNull PingPacket> serializer() {
         return SERIALIZER;
     }
 

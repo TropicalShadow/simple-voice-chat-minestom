@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public record AuthenticationAcknowledgedPacket() implements VoicePacket<AuthenticationAcknowledgedPacket> {
 
-    public static final @NotNull NetworkBuffer.Type<AuthenticationAcknowledgedPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final @NotNull NetworkBuffer.Type<@NotNull AuthenticationAcknowledgedPacket> SERIALIZER = NetworkBufferTemplate.template(
             AuthenticationAcknowledgedPacket::new
     );
 
@@ -17,7 +17,7 @@ public record AuthenticationAcknowledgedPacket() implements VoicePacket<Authenti
     }
 
     @Override
-    public NetworkBuffer.@NotNull Type<AuthenticationAcknowledgedPacket> serializer() {
+    public NetworkBuffer.@NotNull Type<@NotNull AuthenticationAcknowledgedPacket> serializer() {
         return SERIALIZER;
     }
 

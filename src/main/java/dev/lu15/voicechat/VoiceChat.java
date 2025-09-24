@@ -33,9 +33,9 @@ public sealed interface VoiceChat permits VoiceChatImpl {
 
     @NotNull @Unmodifiable Collection<Category> getCategories();
 
-    @NotNull RegistryKey<Category> addCategory(@NotNull Key id, @NotNull Category category);
+    @NotNull RegistryKey<@NotNull Category> addCategory(@NotNull Key id, @NotNull Category category);
 
-    boolean removeCategory(@NotNull RegistryKey<Category> category);
+    boolean removeCategory(@NotNull RegistryKey<@NotNull Category> category);
 
     static @NotNull Key key(@NotNull @KeyPattern.Value String key) {
         return Key.key(NAMESPACE, key);
@@ -48,7 +48,7 @@ public sealed interface VoiceChat permits VoiceChatImpl {
          * @param eventNode the event node
          * @return this builder
          */
-        @NotNull Builder eventNode(@NotNull EventNode<Event> eventNode);
+        @NotNull Builder eventNode(@NotNull EventNode<@NotNull Event> eventNode);
 
         /**
          * Set the public address of the voice server. This is used to tell clients where to connect to.

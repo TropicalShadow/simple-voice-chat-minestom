@@ -17,7 +17,7 @@ public record GroupSoundPacket(
         @Nullable String category
 ) implements VoicePacket<GroupSoundPacket> {
 
-    public static final @NotNull NetworkBuffer.Type<GroupSoundPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final @NotNull NetworkBuffer.Type<@NotNull GroupSoundPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.UUID, GroupSoundPacket::channel,
             NetworkBuffer.UUID, GroupSoundPacket::sender,
             NetworkBuffer.BYTE_ARRAY, GroupSoundPacket::data,
@@ -48,7 +48,7 @@ public record GroupSoundPacket(
     }
 
     @Override
-    public NetworkBuffer.@NotNull Type<GroupSoundPacket> serializer() {
+    public NetworkBuffer.@NotNull Type<@NotNull GroupSoundPacket> serializer() {
         return SERIALIZER;
     }
 

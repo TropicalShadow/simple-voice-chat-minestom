@@ -17,7 +17,7 @@ public record CreateGroupPacket(
 ) implements Packet<CreateGroupPacket> {
 
     public static final @NotNull Key IDENTIFIER = VoiceChat.key("create_group");
-    public static final @NotNull NetworkBuffer.Type<CreateGroupPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final @NotNull NetworkBuffer.Type<@NotNull CreateGroupPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.STRING, CreateGroupPacket::name,
             NetworkBuffer.STRING.optional(), CreateGroupPacket::password,
             NetworkTypes.ShortEnum(Group.Type.class), CreateGroupPacket::type,
@@ -30,7 +30,7 @@ public record CreateGroupPacket(
     }
 
     @Override
-    public NetworkBuffer.@NotNull Type<CreateGroupPacket> serializer() {
+    public NetworkBuffer.@NotNull Type<@NotNull CreateGroupPacket> serializer() {
         return SERIALIZER;
     }
 

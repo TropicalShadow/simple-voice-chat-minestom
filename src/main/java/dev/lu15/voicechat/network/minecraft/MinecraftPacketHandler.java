@@ -19,12 +19,13 @@ import java.util.Map;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.common.PluginMessagePacket;
+import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class MinecraftPacketHandler {
 
-    private final @NotNull Map<Key, NetworkBuffer.Type<Packet<?>>> serializers = new HashMap<>();
+    private final @NotNull Map<Key, NetworkBuffer.Type<@NotNull Packet<?>>> serializers = new HashMap<>();
 
     public MinecraftPacketHandler() {
         // clientbound
@@ -47,14 +48,14 @@ public final class MinecraftPacketHandler {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends Packet<T>> void register(@NotNull Key id, @NotNull NetworkBuffer.Type<T> serializer) {
+    public <T extends Packet<T>> void register(@NotNull Key id, @NotNull NetworkBuffer.Type<@NotNull T> serializer) {
         if (!id.namespace().equals(VoiceChat.NAMESPACE)) throw new IllegalArgumentException("id with incorrect namespace used");
-        this.serializers.put(id, (NetworkBuffer.Type<Packet<?>>) serializer);
+        this.serializers.put(id, (NetworkBuffer.Type<@NotNull Packet<?>>) serializer);
     }
 
-    public @Nullable Packet<?> read(@NotNull String identifier, byte[] data) {
+    public @Nullable Packet<?> read(@Subst("minecraft") @NotNull String identifier, byte[] data) {
         Key key = Key.key(identifier);
-        NetworkBuffer.Type<Packet<?>> serializer = this.serializers.get(key);
+        NetworkBuffer.Type<@NotNull Packet<?>> serializer = this.serializers.get(key);
         if (serializer == null) return null;
 
         NetworkBuffer buffer = NetworkBuffer.wrap(data, 0, data.length);
@@ -62,7 +63,7 @@ public final class MinecraftPacketHandler {
     }
 
     public <T extends Packet<T>> @NotNull PluginMessagePacket write(@NotNull T packet) {
-        NetworkBuffer.Type<T> serializer = packet.serializer();
+        NetworkBuffer.Type<@NotNull T> serializer = packet.serializer();
         NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
         buffer.write(serializer, packet);
 

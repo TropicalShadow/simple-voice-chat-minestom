@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public record YouHereBroPacket() implements VoicePacket<YouHereBroPacket> {
 
-    public static final @NotNull NetworkBuffer.Type<YouHereBroPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final @NotNull NetworkBuffer.Type<@NotNull YouHereBroPacket> SERIALIZER = NetworkBufferTemplate.template(
             YouHereBroPacket::new
     );
 
@@ -17,7 +17,7 @@ public record YouHereBroPacket() implements VoicePacket<YouHereBroPacket> {
     }
 
     @Override
-    public NetworkBuffer.@NotNull Type<YouHereBroPacket> serializer() {
+    public NetworkBuffer.@NotNull Type<@NotNull YouHereBroPacket> serializer() {
         return SERIALIZER;
     }
 

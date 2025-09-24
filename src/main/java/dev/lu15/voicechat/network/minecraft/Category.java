@@ -7,12 +7,14 @@ import org.jetbrains.annotations.Nullable;
 
 public record Category(
         @NotNull String name,
+        @Nullable String nameTranslationKey,
         @Nullable String description,
+        @Nullable String descriptionTranslationKey,
         int @Nullable [] @NotNull [] icon
 ) {
 
     private static final int ICON_SIZE = 16;
-    public static final @NotNull NetworkBuffer.Type<int[][]> ICON_SERIALIZER = new NetworkBuffer.Type<>() {
+    public static final @NotNull NetworkBuffer.Type<int@NotNull [] @NotNull []> ICON_SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, int[][] value) {
             for (int i = 0; i < ICON_SIZE; i++) {
@@ -33,9 +35,11 @@ public record Category(
             return icon;
         }
     };
-    public static final @NotNull NetworkBuffer.Type<Category> NETWORK_TYPE = NetworkBufferTemplate.template(
+    public static final @NotNull NetworkBuffer.Type<@NotNull Category> NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.STRING, Category::name,
+            NetworkBuffer.STRING.optional(), Category::nameTranslationKey,
             NetworkBuffer.STRING.optional(), Category::description,
+            NetworkBuffer.STRING.optional(), Category::descriptionTranslationKey,
             ICON_SERIALIZER.optional(), Category::icon,
             Category::new
     );

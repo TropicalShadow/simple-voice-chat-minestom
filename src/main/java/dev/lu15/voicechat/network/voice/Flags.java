@@ -12,7 +12,7 @@ public record Flags(
     public static final byte WHISPERING = 0b1;
     public static final byte CATEGORY = 0b10;
 
-    public static final @NotNull NetworkBuffer.Type<Flags> SERIALIZER = new NetworkBuffer.Type<>() {
+    public static final @NotNull NetworkBuffer.Type<@NotNull Flags> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Flags value) {
             byte flags = 0;

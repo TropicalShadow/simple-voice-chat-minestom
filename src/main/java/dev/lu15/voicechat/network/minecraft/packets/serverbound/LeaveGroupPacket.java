@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public record LeaveGroupPacket() implements Packet<LeaveGroupPacket> {
 
     public static final @NotNull Key IDENTIFIER = VoiceChat.key("leave_group");
-    public static final @NotNull NetworkBuffer.Type<LeaveGroupPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final @NotNull NetworkBuffer.Type<@NotNull LeaveGroupPacket> SERIALIZER = NetworkBufferTemplate.template(
             LeaveGroupPacket::new
     );
 
@@ -20,7 +20,7 @@ public record LeaveGroupPacket() implements Packet<LeaveGroupPacket> {
     }
 
     @Override
-    public NetworkBuffer.@NotNull Type<LeaveGroupPacket> serializer() {
+    public NetworkBuffer.@NotNull Type<@NotNull LeaveGroupPacket> serializer() {
         return SERIALIZER;
     }
 

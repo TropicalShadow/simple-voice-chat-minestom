@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public record VoiceStatesUpdatedPacket(@NotNull Collection<VoiceState> states) implements Packet<VoiceStatesUpdatedPacket> {
 
     public static final @NotNull Key IDENTIFIER = VoiceChat.key("states");
-    public static final @NotNull NetworkBuffer.Type<VoiceStatesUpdatedPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final @NotNull NetworkBuffer.Type<@NotNull VoiceStatesUpdatedPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkTypes.IntIndexedCollection(VoiceState.NETWORK_TYPE), VoiceStatesUpdatedPacket::states,
             VoiceStatesUpdatedPacket::new
     );
@@ -24,7 +24,7 @@ public record VoiceStatesUpdatedPacket(@NotNull Collection<VoiceState> states) i
     }
 
     @Override
-    public NetworkBuffer.@NotNull Type<VoiceStatesUpdatedPacket> serializer() {
+    public NetworkBuffer.@NotNull Type<@NotNull VoiceStatesUpdatedPacket> serializer() {
         return SERIALIZER;
     }
 

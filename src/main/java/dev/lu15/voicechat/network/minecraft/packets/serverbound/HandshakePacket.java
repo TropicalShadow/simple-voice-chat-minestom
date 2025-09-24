@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public record HandshakePacket(int version) implements Packet<HandshakePacket> {
 
     public static final @NotNull Key IDENTIFIER = VoiceChat.key("request_secret");
-    public static final @NotNull NetworkBuffer.Type<HandshakePacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final @NotNull NetworkBuffer.Type<@NotNull HandshakePacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.INT, HandshakePacket::version,
             HandshakePacket::new
     );
@@ -21,7 +21,7 @@ public record HandshakePacket(int version) implements Packet<HandshakePacket> {
     }
 
     @Override
-    public NetworkBuffer.@NotNull Type<HandshakePacket> serializer() {
+    public NetworkBuffer.@NotNull Type<@NotNull HandshakePacket> serializer() {
         return SERIALIZER;
     }
 

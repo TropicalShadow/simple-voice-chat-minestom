@@ -11,7 +11,7 @@ public record MicrophonePacket(
         boolean whispering
 ) implements VoicePacket<MicrophonePacket> {
 
-    public static final @NotNull NetworkBuffer.Type<MicrophonePacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final @NotNull NetworkBuffer.Type<@NotNull MicrophonePacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.BYTE_ARRAY, MicrophonePacket::data,
             NetworkBuffer.LONG, MicrophonePacket::sequenceNumber,
             NetworkBuffer.BOOLEAN, MicrophonePacket::whispering,
@@ -24,7 +24,7 @@ public record MicrophonePacket(
     }
 
     @Override
-    public NetworkBuffer.@NotNull Type<MicrophonePacket> serializer() {
+    public NetworkBuffer.@NotNull Type<@NotNull MicrophonePacket> serializer() {
         return SERIALIZER;
     }
 

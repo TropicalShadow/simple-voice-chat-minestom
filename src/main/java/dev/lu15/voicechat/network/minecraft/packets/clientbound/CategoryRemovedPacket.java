@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public record CategoryRemovedPacket(@NotNull String category) implements Packet<CategoryRemovedPacket> {
 
     public static final @NotNull Key IDENTIFIER = VoiceChat.key("remove_category");
-    public static final @NotNull NetworkBuffer.Type<CategoryRemovedPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final @NotNull NetworkBuffer.Type<@NotNull CategoryRemovedPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.STRING, CategoryRemovedPacket::category,
             CategoryRemovedPacket::new
     );
@@ -29,7 +29,7 @@ public record CategoryRemovedPacket(@NotNull String category) implements Packet<
     }
 
     @Override
-    public NetworkBuffer.@NotNull Type<CategoryRemovedPacket> serializer() {
+    public NetworkBuffer.@NotNull Type<@NotNull CategoryRemovedPacket> serializer() {
         return SERIALIZER;
     }
 

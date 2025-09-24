@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public record CategoryAddedPacket(@NotNull String identifier, @NotNull Category category) implements Packet<CategoryAddedPacket> {
 
     public static final @NotNull Key IDENTIFIER = VoiceChat.key("add_category");
-    public static final @NotNull NetworkBuffer.Type<CategoryAddedPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final @NotNull NetworkBuffer.Type<@NotNull CategoryAddedPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.STRING, CategoryAddedPacket::identifier,
             Category.NETWORK_TYPE, CategoryAddedPacket::category,
             CategoryAddedPacket::new
@@ -41,7 +41,7 @@ public record CategoryAddedPacket(@NotNull String identifier, @NotNull Category 
     }
 
     @Override
-    public NetworkBuffer.@NotNull Type<CategoryAddedPacket> serializer() {
+    public NetworkBuffer.@NotNull Type<@NotNull CategoryAddedPacket> serializer() {
         return SERIALIZER;
     }
 

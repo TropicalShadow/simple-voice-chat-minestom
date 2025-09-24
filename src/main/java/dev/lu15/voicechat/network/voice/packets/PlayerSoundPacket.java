@@ -19,7 +19,7 @@ public record PlayerSoundPacket(
         @Nullable String category
 ) implements VoicePacket<PlayerSoundPacket> {
 
-    public static final @NotNull NetworkBuffer.Type<PlayerSoundPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final @NotNull NetworkBuffer.Type<@NotNull PlayerSoundPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.UUID, PlayerSoundPacket::channel,
             NetworkBuffer.UUID, PlayerSoundPacket::sender,
             NetworkBuffer.BYTE_ARRAY, PlayerSoundPacket::data,
@@ -54,7 +54,7 @@ public record PlayerSoundPacket(
     }
 
     @Override
-    public NetworkBuffer.@NotNull Type<PlayerSoundPacket> serializer() {
+    public NetworkBuffer.@NotNull Type<@NotNull PlayerSoundPacket> serializer() {
         return SERIALIZER;
     }
 

@@ -8,6 +8,6 @@ public interface Packet<T extends Packet<T>> {
 
     @NotNull Key id();
 
-    @NotNull NetworkBuffer.Type<T> serializer();
+    @NotNull NetworkBuffer.Type<@NotNull T> serializer();
 
 }

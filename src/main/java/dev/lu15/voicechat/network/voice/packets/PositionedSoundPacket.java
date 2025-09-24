@@ -21,7 +21,7 @@ public record PositionedSoundPacket(
         @Nullable String category
 ) implements VoicePacket<PositionedSoundPacket> {
 
-    public static final @NotNull NetworkBuffer.Type<PositionedSoundPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final @NotNull NetworkBuffer.Type<@NotNull PositionedSoundPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.UUID, PositionedSoundPacket::channel,
             NetworkBuffer.UUID, PositionedSoundPacket::sender,
             NetworkTypes.POSITION, PositionedSoundPacket::position,
@@ -58,7 +58,7 @@ public record PositionedSoundPacket(
     }
 
     @Override
-    public NetworkBuffer.@NotNull Type<PositionedSoundPacket> serializer() {
+    public NetworkBuffer.@NotNull Type<@NotNull PositionedSoundPacket> serializer() {
         return SERIALIZER;
     }
 

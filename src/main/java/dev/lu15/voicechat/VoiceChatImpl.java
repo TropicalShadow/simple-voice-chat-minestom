@@ -20,6 +20,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.Collections;
+
+import dev.lu15.voicechat.network.voice.packets.PlayerSoundPacket;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
@@ -27,6 +29,10 @@ import net.minestom.server.event.Event;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.player.PlayerPluginMessageEvent;
+import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
+import net.minestom.server.network.packet.server.common.ResourcePackPushPacket;
+import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
+import net.minestom.server.network.packet.server.play.ChangeGameStatePacket;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.PacketSendingUtils;
@@ -41,14 +47,14 @@ final class VoiceChatImpl implements VoiceChat {
     private static final @NotNull Logger LOGGER = LoggerFactory.getLogger(VoiceChatImpl.class);
 
     private final @NotNull MinecraftPacketHandler packetHandler = new MinecraftPacketHandler();
-    private final @NotNull DynamicRegistry<Category> categories = DynamicRegistry.create(VoiceChat.key("categories"));
+    private final @NotNull DynamicRegistry<@NotNull Category> categories = DynamicRegistry.create(VoiceChat.key("categories"));
 
     private final @NotNull VoiceServer server;
     private final int port;
     private final @NotNull String publicAddress;
 
     @SuppressWarnings("PatternValidation")
-    private VoiceChatImpl(@NotNull InetAddress address, int port, @NotNull EventNode<Event> eventNode, @NotNull String publicAddress) {
+    private VoiceChatImpl(@NotNull InetAddress address, int port, @NotNull EventNode<@NotNull Event> eventNode, @NotNull String publicAddress) {
         this.port = port;
         this.publicAddress = publicAddress;
 
@@ -56,12 +62,13 @@ final class VoiceChatImpl implements VoiceChat {
         // we have to enable this feature to allow for the removal of categories
         System.setProperty("minestom.registry.unsafe-ops", "true");
 
-        EventNode<Event> voiceServerEventNode = EventNode.all("voice-server");
+        EventNode<@NotNull Event> voiceServerEventNode = EventNode.all("voice-server");
         eventNode.addChild(voiceServerEventNode);
         this.server = new VoiceServer(this, address, port, voiceServerEventNode);
 
         this.server.start();
         LOGGER.info("voice server started on {}:{}", address, port);
+
 
         eventNode.addListener(PlayerPluginMessageEvent.class, event -> {
             String channel = event.getIdentifier();
@@ -90,7 +97,7 @@ final class VoiceChatImpl implements VoiceChat {
         // send existing categories to newly joining players
         eventNode.addListener(PlayerJoinVoiceChatEvent.class, event -> {
             for (Category category : this.categories.values()) {
-                RegistryKey<Category> key = this.categories.getKey(category);
+                RegistryKey<@NotNull Category> key = this.categories.getKey(category);
                 if (key == null) throw new IllegalStateException("category not found in registry");
                 this.sendPacket(event.getPlayer(), new CategoryAddedPacket(key.key(), category));
             }
@@ -98,7 +105,7 @@ final class VoiceChatImpl implements VoiceChat {
     }
 
     private void handle(@NotNull Player player, @NotNull HandshakePacket packet) {
-        if (packet.version() != 18) {
+        if (packet.version() < 18) {
             LOGGER.warn("player {} using wrong version: {}", player.getUsername(), packet.version());
             return;
         }
@@ -114,9 +121,9 @@ final class VoiceChatImpl implements VoiceChat {
             SecretUtilities.setSecret(player, event.getSecret());
 
             player.sendPacket(this.packetHandler.write(new HandshakeAcknowledgePacket(
-                    event.getSecret(),
+                    event.getSecret().getSecret(),
                     this.port,
-                    player.getUuid(), // why is this sent? the client already knows the player's uuid
+                    player.getUuid(), // why is this sent? the client already knows the player's uuid, funny init?
                     Codec.VOIP, // todo: configurable
                     1024, // todo: configurable
                     48, // todo: configurable
@@ -135,8 +142,10 @@ final class VoiceChatImpl implements VoiceChat {
                 false,
                 player.getUuid(),
                 player.getUsername(),
+                false,
                 null
         );
+
         player.setTag(Tags.PLAYER_STATE, state);
         PacketSendingUtils.broadcastPlayPacket(this.packetHandler.write(new VoiceStateUpdatedPacket(state)));
 
@@ -159,9 +168,9 @@ final class VoiceChatImpl implements VoiceChat {
     }
 
     @Override
-    public @NotNull RegistryKey<Category> addCategory(@NotNull Key id, @NotNull Category category) {
+    public @NotNull RegistryKey<@NotNull Category> addCategory(@NotNull Key id, @NotNull Category category) {
         Category existing = this.categories.get(id);
-        RegistryKey<Category> key = this.categories.register(id, category);
+        RegistryKey<@NotNull Category> key = this.categories.register(id, category);
 
         for (Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
             if (!player.hasTag(Tags.VOICE_CLIENT)) continue; // only send to voice chat clients
@@ -175,7 +184,7 @@ final class VoiceChatImpl implements VoiceChat {
     }
 
     @Override
-    public boolean removeCategory(@NotNull RegistryKey<Category> category) {
+    public boolean removeCategory(@NotNull RegistryKey<@NotNull Category> category) {
         boolean removed = this.categories.remove(category.key());
         if (!removed) return false;
 
@@ -194,7 +203,7 @@ final class VoiceChatImpl implements VoiceChat {
 
         private @NotNull String publicAddress = ""; // this causes the client to attempt to connect to the same ip as the minecraft server
 
-        private @Nullable EventNode<Event> eventNode;
+        private @Nullable EventNode<@NotNull Event> eventNode;
 
         BuilderImpl(@NotNull String address, int port) {
             try {
@@ -206,7 +215,7 @@ final class VoiceChatImpl implements VoiceChat {
         }
 
         @Override
-        public @NotNull Builder eventNode(@NotNull EventNode<Event> eventNode) {
+        public @NotNull Builder eventNode(@NotNull EventNode<@NotNull Event> eventNode) {
             this.eventNode = eventNode;
             return this;
         }
