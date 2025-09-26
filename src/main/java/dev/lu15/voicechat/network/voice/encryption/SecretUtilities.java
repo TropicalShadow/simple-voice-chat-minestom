@@ -1,22 +1,22 @@
 package dev.lu15.voicechat.network.voice.encryption;
 
 import dev.lu15.voicechat.Tags;
-import java.security.SecureRandom;
-import java.util.Random;
+
 import java.util.UUID;
-import net.minestom.server.MinecraftServer;
+import java.util.WeakHashMap;
+
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class SecretUtilities {
 
+    private static final @NotNull WeakHashMap<UUID, Secret> secrets = new WeakHashMap<>();
+
     private SecretUtilities() {}
 
     public static @Nullable Secret getSecret(@NotNull UUID player) {
-        // todo: this method is O(n), is it worth storing a map of UUIDs to players ourselves?
-        Player p = MinecraftServer.getConnectionManager().getOnlinePlayerByUuid(player);
-        return p != null ? getSecret(p) : null;
+        return secrets.getOrDefault(player, null);
     }
 
     public static @Nullable Secret getSecret(@NotNull Player player) {
@@ -28,6 +28,12 @@ public final class SecretUtilities {
     }
 
     public static void setSecret(@NotNull Player player, @Nullable Secret secret) {
+        if (secret == null) {
+            secrets.remove(player.getUuid());
+            player.removeTag(Tags.SECRET);
+            return;
+        }
+        secrets.put(player.getUuid(), secret);
         player.setTag(Tags.SECRET, secret);
     }
 
