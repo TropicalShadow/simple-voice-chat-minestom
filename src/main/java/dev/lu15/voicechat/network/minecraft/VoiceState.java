@@ -11,9 +11,11 @@ public record VoiceState(
         boolean disconnected,
         @NotNull UUID uuid,
         @NotNull String name,
-        boolean hasGroup,
-        @Nullable UUID group
+        boolean hasGroup
+        //@Nullable UUID group
 ) {
+
+
 
     public static final @NotNull NetworkBuffer.Type<@NotNull VoiceState> NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.BOOLEAN, VoiceState::disabled,
@@ -21,7 +23,7 @@ public record VoiceState(
             NetworkBuffer.UUID, VoiceState::uuid,
             NetworkBuffer.STRING, VoiceState::name,
             NetworkBuffer.BOOLEAN, VoiceState::hasGroup,
-            NetworkBuffer.OPT_UUID, VoiceState::group,
+
             VoiceState::new
     );
 

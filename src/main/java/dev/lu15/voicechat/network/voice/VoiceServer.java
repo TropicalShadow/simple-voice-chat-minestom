@@ -190,7 +190,10 @@ public final class VoiceServer {
             if (time - player.getTag(Tags.LAST_KEEP_ALIVE) > 1000 * 10) { // todo: make this configurable
                 // todo: will the client be trying to reconnect?
                 LOGGER.warn("player {} did not send keepalive packet", player.getUsername());
-                player.kick(Component.text("Simple Voice Chat | Connection timed out.")); // todo: remove me, i'm a library
+                //player.kick(Component.text("Simple Voice Chat | Connection timed out.")); // todo: remove me, i'm a library
+                player.removeTag(Tags.VOICE_CLIENT);
+                player.removeTag(Tags.PLAYER_STATE);
+                player.removeTag(Tags.LAST_KEEP_ALIVE);
                 this.connections.remove(address);
             } else this.write(player, new KeepAlivePacket());
         });

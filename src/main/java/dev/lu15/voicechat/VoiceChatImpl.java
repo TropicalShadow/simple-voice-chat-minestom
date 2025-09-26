@@ -142,8 +142,7 @@ final class VoiceChatImpl implements VoiceChat {
                 false,
                 player.getUuid(),
                 player.getUsername(),
-                false,
-                null
+                false
         );
 
         player.setTag(Tags.PLAYER_STATE, state);
